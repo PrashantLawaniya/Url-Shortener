@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="auth-container">
+    <h2>Create an Account</h2>
+    <form id="signup-form">
+      <input type="text" id="signup-username" placeholder="Username" required>
+      <input type="password" id="signup-password" placeholder="Password" required>
+      <button type="submit" class="btn btn-lg">Sign Up</button>
+    </form>
+    <p>Already have an account? <a href="/login">Log in</a></p>
+  </div>
+  <script>
+    document.getElementById("signup-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      let username = document.getElementById("signup-username").value.trim();
+      let password = document.getElementById("signup-password").value.trim();
+
+      let res = await fetch("/api/signup", {   <!-- ✅ changed here -->
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ username, password })
+      });
+
+      let data = await res.json();
+      alert(data.message || data.error);
+
+      if (data.ok) {
+        // Redirect to login page after successful signup
+        window.location.href = "/login";
+      }
+    });
+  </script>
+</body>
+</html>
